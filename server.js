@@ -81,6 +81,6 @@ app.post('/clients/add', (req, res) => {
 });
 
 // Start the server
-app.listen(3000, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:3000');
+app.listen(5500, '127.0.0.1', () => {
+    console.log('Server running on 127.0.0.1:5500');
 });
