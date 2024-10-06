@@ -4,7 +4,7 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
 <body>
 
@@ -19,10 +19,6 @@
             <li><a href="#resources">Resources</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <h1>Welcome, {{ current_user.username }}</h1>
-        <nav>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </nav>
     </header>
 
     <!-- Hero Section -->
@@ -82,18 +78,11 @@
             <textarea name="description" placeholder="Brief description of your appointment" required></textarea>
             <button type="submit">Book Appointment</button>
         </form>
-
-        <h2>Your Appointments</h2>
-        <ul>
-            {% for appointment in appointments %}
-                <li>{{ appointment.appointment_date }} - {{ appointment.description }}</li>
-            {% endfor %}
-        </ul>
     </section>
 
     <!-- Vertical Separation Section -->
     <section class="vertical-separation">
-        <img src="images.jpeg" alt="Mental health illustration">
+        <img src="{{ url_for('static', filename='images.jpeg') }}" alt="Illustration">
         <div>
             <h4>Find Balance and Wellbeing</h4>
             <p>We all need help at different times in life. At MindConnect, we aim to provide the support you need in a convenient and confidential manner. Our licensed professionals are here to listen and guide you through tough times.</p>
@@ -159,7 +148,7 @@
         </div>
     </footer>
 
-    <script src="\Mind-Connect\static\js\chatbot.js"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
 </body>
 </html>
 
