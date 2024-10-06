@@ -114,11 +114,16 @@ def get_openai_response(message):
             n=1,
             stop=None,
         )
+          # Log the full response to see the structure
+        print(f"API Response: {response}")
+
         reply = response.choices[0].text.strip()
         return reply
-
+     
     except Exception as e:
+        print(f"Error: {e}")  # Log the error to the console
         return "Sorry, I'm having trouble processing your request right now. Please try again later."
+    
 
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
@@ -128,6 +133,7 @@ def chatbot():
     if not user_message:
         return jsonify({'reply': "I didn't understand that. Could you rephrase it?"})
 
+    print(f"User message: {user_message}")  # Log the user message
     bot_reply = get_openai_response(user_message)
     return jsonify({'reply': bot_reply})
 
