@@ -150,6 +150,7 @@ def book_appointment():
 
 # Start the Flask app
 if __name__ == '__main__':
-    db.create_all()
-    app.run(port=5500, debug=True)
+      with app.app_context():
+        db.create_all()
+app.run(port=5500, debug=True)
     
