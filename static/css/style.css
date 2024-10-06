@@ -6,7 +6,9 @@
 }
 
 body {
-    background: url('sky.avif') repeat center center fixed;
+    background-image: url('/static/sky.avif');
+    background-position: center center;
+    background-attachment: fixed;
     background-size: cover;
     color: #333;
     display: flex;
@@ -279,12 +281,12 @@ body {
 .vertical-separation h4 {
     font-size: 28px;
     margin-bottom: 20px;
-    color: whitesmoke;
+    color: black;
 }
 
 .vertical-separation p {
     font-size: 18px;
-    color: whitesmoke;
+    color: black;
 }
 /* Chatbot Section */
 .chatbot-section {
