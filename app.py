@@ -17,8 +17,7 @@ CORS(app)
 app.secret_key = secrets.token_hex(32)
 
 # Set your OpenAI API key here
-openai.api_key = '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'  
-
+openai.api_key = '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'
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
