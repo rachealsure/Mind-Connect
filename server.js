@@ -95,6 +95,6 @@ app.post('/register', async (req, res) => {
 
 
 // Start the server
-app.listen(5500, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:5500');
+app.listen(5000, '127.0.0.1', () => {
+    console.log('Server running on 127.0.0.1:5000');
 });
