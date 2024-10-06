@@ -61,7 +61,7 @@ def register():
         db.session.commit()
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
-    return render_template('index.html')
+    return render_template('homepage.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -76,7 +76,7 @@ def login():
             return redirect(url_for('homepage'))
         else:
             flash('Login failed. Check email or password.', 'danger')
-    return render_template('index.html')
+    return render_template('homepage.html')
 
 @app.route('/logout')
 @login_required
