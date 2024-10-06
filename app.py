@@ -102,27 +102,27 @@ def homepage():
         appointments = Appointment.query.filter_by(user_id=current_user.id).all()
         return render_template('homepage.html', appointments=appointments)
 
-# Define a function to interact with OpenAI API
 def get_openai_response(message):
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=message,
+        # Use openai.ChatCompletion for newer OpenAI models
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Specify the model
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": message}
+            ],
             max_tokens=150,
             temperature=0.7,
             n=1,
-            stop=None,
         )
-          # Log the full response to see the structure
-        print(f"API Response: {response}")
-
-        reply = response.choices[0].text.strip()
+        reply = response['choices'][0]['message']['content'].strip()
         return reply
-     
+
     except Exception as e:
-        print(f"Error: {e}")  # Log the error to the console
+        print(f"Error: {e}")  # Optionally print the error for debugging
         return "Sorry, I'm having trouble processing your request right now. Please try again later."
-    
+
+      
 
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
