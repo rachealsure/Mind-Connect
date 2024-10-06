@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+< lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindConnect</title>
     <link href="css/style.css" rel="stylesheet">
 </head>
-<body>
+<>
 
     <!-- Navbar -->
     <header class="navbar">
@@ -19,6 +19,10 @@
             <li><a href="#resources">Resources</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <h1>Welcome, {{ current_user.username }}</h1>
+        <nav>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
     </header>
 
     <!-- Hero Section -->
@@ -71,32 +75,20 @@
     </section>
 
     <!-- Appointments Section -->
-    <section class="appointments" id="appointments">
+    <section class="appointments">
         <h2>Book an Appointment</h2>
-        <form action="/book-appointment" method="POST" class="appointment-form">
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="counselor">Choose a Counselor:</label>
-            <select id="counselor" name="counselor">
-                <option value="dr-kara-danvers">Dr. Kara Danvers</option>
-                <option value="dr-john-kubai">Dr. John Kubai</option>
-                <option value="dr-carrie-winston">Dr. Carrie Winston</option>
-                <option value="dr-alex-waweru">Dr. Alex Waweru</option>
-                
-            </select>
-
-            <label for="date">Preferred Date:</label>
-            <input type="date" id="date" name="date" required>
-
-            <label for="time">Preferred Time:</label>
-            <input type="time" id="time" name="time" required>
-
-            <button type="submit" class="submit-button">Book Appointment</button>
+        <form action="homepage.html" method="POST">
+            <input type="text" name="appointment_date" placeholder="Appointment Date (e.g., 2024-10-05)" required>
+            <textarea name="description" placeholder="Brief description of your appointment" required></textarea>
+            <button type="submit">Book Appointment</button>
         </form>
+
+        <h2>Your Appointments</h2>
+        <ul>
+            {% for appointment in appointments %}
+                <li>{{ appointment.appointment_date }} - {{ appointment.description }}</li>
+            {% endfor %}
+        </ul>
     </section>
 
     <!-- Vertical Separation Section -->
@@ -113,7 +105,7 @@
             <input type="text" id="user-input" placeholder="Type your message..." />
             <button onclick="sendMessage()">Send</button>
         </div>
-    </section>
+    </section>>
 
     <!-- Resources Section -->
     <section class="resources" id="resources">
@@ -167,7 +159,7 @@
         </div>
     </footer>
 
-<script src="chatbot.js"></script>
+    <script src="\Mind-Connect\static\js\chatbot.js"></script>
 </body>
 </html>
 
