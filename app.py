@@ -67,7 +67,7 @@ def register():
         db.session.commit()
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
-    return render_template('homepage.html')
+    return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -82,7 +82,7 @@ def login():
             return redirect(url_for('homepage'))
         else:
             flash('Login failed. Check email or password.', 'danger')
-    return render_template('homepage.html')
+    return render_template('index.html')
 
 @app.route('/logout')
 @login_required
@@ -94,15 +94,27 @@ def logout():
 @login_required
 def homepage():
     if request.method == 'POST':
+        # Handle POST request
         appointment_date = request.form.get('appointment_date')
         description = request.form.get('description')
 
+        # Create a new appointment and save it to the database
         new_appointment = Appointment(user_id=current_user.id, appointment_date=appointment_date, description=description)
         db.session.add(new_appointment)
         db.session.commit()
+        
+        # Flash success message
         flash('Appointment booked successfully!', 'success')
+
+        # Fetch appointments to display on the homepage
         appointments = Appointment.query.filter_by(user_id=current_user.id).all()
-    return render_template('homepage.html', appointments=appointments)\
+        return render_template('homepage.html', appointments=appointments)  # Render homepage after form submission
+    
+    else:
+        # For GET requests, just display the homepage with the user's appointments
+        appointments = Appointment.query.filter_by(user_id=current_user.id).all()
+        return render_template('homepage.html', appointments=appointments)
+
 
 # Define a function to interact with OpenAI API
 def get_openai_response(message):
