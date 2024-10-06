@@ -1,5 +1,5 @@
 import openai
-from flask import Flask, request, jsonify,render_template,redirect, url_for, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -14,10 +14,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
 
 # Set the secret key
-app.secret_key = secrets.token_hex(32) 
+app.secret_key = secrets.token_hex(32)
 
 # Set your OpenAI API key here
-openai.api_key = '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'
+openai.api_key = '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'  
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -42,13 +42,8 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/')
-def index():
-    return render_template('index.html')  # Registration/Login page
-
-# Route to serve the homepage
-@app.route('/')
 def home():
-    return render_template('homepage.html')
+    return render_template('homepage.html')  # Home page where you can register or log in
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -56,7 +51,7 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        
+
         user_exists = User.query.filter_by(email=email).first()
         if user_exists:
             flash('Email is already registered', 'danger')
@@ -67,22 +62,21 @@ def register():
         db.session.commit()
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
-    return render_template('index.html')
-
+    return render_template('homepage.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        
+
         user = User.query.filter_by(email=email).first()
         if user and user.password == password:
             login_user(user)
             return redirect(url_for('homepage'))
         else:
             flash('Login failed. Check email or password.', 'danger')
-    return render_template('index.html')
+    return render_template('homepage.html')
 
 @app.route('/logout')
 @login_required
@@ -94,64 +88,49 @@ def logout():
 @login_required
 def homepage():
     if request.method == 'POST':
-        # Handle POST request
         appointment_date = request.form.get('appointment_date')
         description = request.form.get('description')
 
-        # Create a new appointment and save it to the database
         new_appointment = Appointment(user_id=current_user.id, appointment_date=appointment_date, description=description)
         db.session.add(new_appointment)
         db.session.commit()
-        
-        # Flash success message
-        flash('Appointment booked successfully!', 'success')
 
-        # Fetch appointments to display on the homepage
-        appointments = Appointment.query.filter_by(user_id=current_user.id).all()
-        return render_template('homepage.html', appointments=appointments)  # Render homepage after form submission
-    
-    else:
-        # For GET requests, just display the homepage with the user's appointments
+        flash('Appointment booked successfully!', 'success')
         appointments = Appointment.query.filter_by(user_id=current_user.id).all()
         return render_template('homepage.html', appointments=appointments)
 
+    else:
+        appointments = Appointment.query.filter_by(user_id=current_user.id).all()
+        return render_template('homepage.html', appointments=appointments)
 
 # Define a function to interact with OpenAI API
 def get_openai_response(message):
     try:
-        # Call OpenAI's GPT model
         response = openai.Completion.create(
-            engine="text-davinci-003",  # GPT-3 model
+            engine="text-davinci-003",
             prompt=message,
-            max_tokens=150,  # Limit on the response length
-            temperature=0.7,  # Temperature for creativity
-            n=1,  # Number of responses to generate
-            stop=None,  # When to stop the generation (you can customize it)
+            max_tokens=150,
+            temperature=0.7,
+            n=1,
+            stop=None,
         )
-        
-        # Extract the response text
         reply = response.choices[0].text.strip()
         return reply
 
     except Exception as e:
         return "Sorry, I'm having trouble processing your request right now. Please try again later."
 
-# Define a route to handle incoming chatbot requests
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
     data = request.json
     user_message = data.get('message')
-    
-    # Ensure there is a message
+
     if not user_message:
         return jsonify({'reply': "I didn't understand that. Could you rephrase it?"})
-    
-    # Get the AI response from OpenAI
+
     bot_reply = get_openai_response(user_message)
-    
     return jsonify({'reply': bot_reply})
 
-# Booking Appointment API
 @app.route('/api/book-appointment', methods=['POST'])
 def book_appointment():
     data = request.json
@@ -160,15 +139,12 @@ def book_appointment():
     email = data.get('email')
     date = data.get('date')
 
-    # Logic to save the appointment to a database (mock response here)
     if counselor and name and email and date:
         return jsonify({'success': True, 'message': 'Appointment booked successfully!'})
     else:
         return jsonify({'success': False, 'message': 'Failed to book appointment.'}), 400
 
-# Start the Flask app
 if __name__ == '__main__':
-      with app.app_context():
+    with app.app_context():
         db.create_all()
-app.run(port=5500, debug=True)
-    
+    app.run(port=5500, debug=True)
