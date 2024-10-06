@@ -75,10 +75,24 @@ app.get('/clients', (req, res) => {
 });
 
 // Simple POST route for clients
-app.post('/clients/add', (req, res) => {
-    console.log("Received data:", req.body);
-    res.json({ message: 'Client added successfully!' });
+//app.post('/clients/add', (req, res) => {
+    //console.log("Received data:", req.body);
+    //res.json({ message: 'Client added successfully!' });
+//}); 
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Insert new user into database
+    db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, result) => {
+        if (err) throw err;
+        res.redirect('/login');
+    });
 });
+
 
 // Start the server
 app.listen(5500, '127.0.0.1', () => {
