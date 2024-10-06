@@ -22,14 +22,14 @@ db.connect(err => {
     }
 });
 
-// Simple GET route for clients
-app.get('/clients', (req, res) => {
-    const query = 'SELECT * FROM clients'; // Adjust table name as necessary
+// Simple GET route for user
+app.get('/user', (req, res) => {
+    const query = 'SELECT * FROM user'; // Adjust table name as necessary
     db.query(query, (error, results) => {
         if (error) {
-            return res.status(500).json({ message: 'Error fetching clients', error });
+            return res.status(500).json({ message: 'Error fetching user', error });
         }
-        res.json({ message: 'Clients retrieved successfully', clients: results });
+        res.json({ message: 'Use retrieved successfully', user: results });
     });
 });
 
