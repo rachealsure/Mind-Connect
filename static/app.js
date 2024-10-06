@@ -26,8 +26,8 @@ app.use(passport.session());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Lifelineray123',
-    database: 'mindconnect_db'
+    password: 'Hampty@2030',
+    database: 'mindconnect'
 });
 
 // Check connection
