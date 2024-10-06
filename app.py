@@ -42,7 +42,7 @@ def index():
     return render_template('index.html')  # Registration/Login page
 
 # Route to serve the homepage
-@app.route('/homepage')
+@app.route('/')
 def home():
     return render_template('homepage.html')
 
