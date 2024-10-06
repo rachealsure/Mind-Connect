@@ -9,7 +9,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root', // replace with your MySQL username
-    password: 'Hampty@2030', // your MySQL password
+    password: 'Hampty2030', // your MySQL password
     database: 'mindconnect' // your database name
 });
 
@@ -34,10 +34,10 @@ app.get('/clients', (req, res) => {
 });
 
 // Simple POST route for clients
-//app.post('/clients/add', (req, res) => {
-    //console.log("Received data:", req.body);
-    //res.json({ message: 'Client added successfully!' });
-//}); 
+app.post('/clients/add', (req, res) => {
+    console.log("Received data:", req.body);
+    res.json({ message: 'Client added successfully!' });
+}); 
 
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;

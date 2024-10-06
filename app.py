@@ -1,24 +1,45 @@
-import openai
-from flask import Flask, request, jsonify,render_template,redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_cors import CORS  
+import openai
+# In Python interactive shell or script
+from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from flask_cors import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Lifelineray123@localhost/mindconnect'
+
+# Database Configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Hampty2030@localhost/mindconnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize database
+db = SQLAlchemy(app)
+
+# Initialize CORS
 CORS(app)
 
-# Set your OpenAI API key here
-openai.api_key = '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'
+# Set OpenAI API key
+openai.api_key = os.getenv('OPENAI_API_KEY')  # Use environment variable
 
-db = SQLAlchemy(app)
+# Initialize LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Test database connection
+def test_db_connection():
+    try:
+        with app.app_context():
+            db.engine.connect()
+            print("Successfully connected to the database!")
+            return True
+    except Exception as e:
+        print(f"Database connection failed: {str(e)}")
+        return False
 
 ### Database Models ###
 class User(UserMixin, db.Model):
@@ -41,10 +62,20 @@ def load_user(user_id):
 def index():
     return render_template('index.html')  # Registration/Login page
 
-# Route to serve the homepage
-@app.route('/')
-def home():
-    return render_template('homepage.html')
+@app.route('/homepage', methods=['GET', 'POST'])
+@login_required
+def homepage():
+    if request.method == 'POST':
+        appointment_date = request.form.get('appointment_date')
+        description = request.form.get('description')
+
+        new_appointment = Appointment(user_id=current_user.id, appointment_date=appointment_date, description=description)
+        db.session.add(new_appointment)
+        db.session.commit()
+        flash('Appointment booked successfully!', 'success')
+
+    appointments = Appointment.query.filter_by(user_id=current_user.id).all()
+    return render_template('homepage.html', appointments=appointments)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -58,13 +89,12 @@ def register():
             flash('Email is already registered', 'danger')
             return redirect(url_for('register'))
 
-        new_user = User(username=username, email=email, password=password)
+        new_user = User(username=username, email=email, password=generate_password_hash(password))
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
     return render_template('homepage.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -73,7 +103,7 @@ def login():
         password = request.form.get('password')
         
         user = User.query.filter_by(email=email).first()
-        if user and user.password == password:
+        if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('homepage'))
         else:
@@ -86,37 +116,18 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/homepage', methods=['GET', 'POST'])
-@login_required
-def homepage():
-    if request.method == 'POST':
-        appointment_date = request.form.get('appointment_date')
-        description = request.form.get('description')
-
-        new_appointment = Appointment(user_id=current_user.id, appointment_date=appointment_date, description=description)
-        db.session.add(new_appointment)
-        db.session.commit()
-        flash('Appointment booked successfully!', 'success')
-        appointments = Appointment.query.filter_by(user_id=current_user.id).all()
-    return render_template('homepage.html', appointments=appointments)\
-
 # Define a function to interact with OpenAI API
 def get_openai_response(message):
     try:
-        # Call OpenAI's GPT model
         response = openai.Completion.create(
-            engine="text-davinci-003",  # GPT-3 model
+            engine="text-davinci-003",
             prompt=message,
-            max_tokens=150,  # Limit on the response length
-            temperature=0.7,  # Temperature for creativity
-            n=1,  # Number of responses to generate
-            stop=None,  # When to stop the generation (you can customize it)
+            max_tokens=150,
+            temperature=0.7,
+            n=1,
+            stop=None,
         )
-        
-        # Extract the response text
-        reply = response.choices[0].text.strip()
-        return reply
-
+        return response.choices[0].text.strip()
     except Exception as e:
         return "Sorry, I'm having trouble processing your request right now. Please try again later."
 
@@ -126,11 +137,9 @@ def chatbot():
     data = request.json
     user_message = data.get('message')
     
-    # Ensure there is a message
     if not user_message:
         return jsonify({'reply': "I didn't understand that. Could you rephrase it?"})
     
-    # Get the AI response from OpenAI
     bot_reply = get_openai_response(user_message)
     
     return jsonify({'reply': bot_reply})
@@ -144,7 +153,6 @@ def book_appointment():
     email = data.get('email')
     date = data.get('date')
 
-    # Logic to save the appointment to a database (mock response here)
     if counselor and name and email and date:
         return jsonify({'success': True, 'message': 'Appointment booked successfully!'})
     else:
@@ -152,7 +160,9 @@ def book_appointment():
 
 # Start the Flask app
 if __name__ == '__main__':
-      with app.app_context():
-        db.create_all()
-app.run(port=5500, debug=True)
-    
+    if test_db_connection():
+        with app.app_context():
+            db.create_all()
+        app.run(port=5500, debug=True)
+    else:
+        print("Application startup failed due to database connection error.")
