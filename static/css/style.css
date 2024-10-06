@@ -1,0 +1,408 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background: url('sky.avif') repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #4CAF50;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 100px 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.hero h2 {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 40px;
+    color: #666;
+}
+
+.hero .cta-button {
+    padding: 15px 40px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.hero .cta-button:hover {
+    background-color: #388e3c;
+}
+
+/* Benefits Section */
+.benefits {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 0;
+    background-color: #f5f5f5;
+    margin-top: 40px;
+    border-radius: 10px;
+}
+
+.benefits h3 {
+    font-size: 26px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.benefit-item {
+    width: 30%;
+    text-align: center;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-item p {
+    font-size: 16px;
+    color: #666;
+}
+/* Counselors Section */
+.counselors {
+    background-color: #f9f9f9;
+    padding: 50px;
+    text-align: center;
+}
+
+.counselor-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px;
+    display: inline-block;
+    width: 30%;
+}
+
+.counselor-item h3 {
+    color: #333;
+}
+
+.book-now-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.book-now-button:hover {
+    background-color: #45a049;
+}
+
+/* Appointments Section */
+.appointments {
+    background-color: #fff;
+    padding: 50px;
+    text-align: center;
+}
+
+.appointment-form {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #f4f4f9;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.appointment-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.appointment-form input,
+.appointment-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.submit-button {
+    background-color: #379683;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #2b7a58;
+}
+
+/* Resources Section */
+.resources {
+    padding: 40px 20px;
+    background-color: white;
+    margin-top: 40px;
+    border-radius: 10px;
+}
+
+.resources h2 {
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.resources ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+.resources ul li {
+    margin-bottom: 15px;
+}
+
+.resources ul li a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.resources ul li a:hover {
+    text-decoration: underline;
+}
+
+.resources h3 {
+    font-size: 24px;
+    margin-top: 40px;
+    color: #4CAF50;
+}
+
+.resource-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.resource-list li {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Vertical Separation Screen */
+.vertical-separation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 0;
+    margin-top: 40px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.vertical-separation img {
+    width: 40%;
+    border-radius: 12px;
+}
+
+.vertical-separation div {
+    width: 55%;
+}
+
+.vertical-separation h4 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: whitesmoke;
+}
+
+.vertical-separation p {
+    font-size: 18px;
+    color: whitesmoke;
+}
+/* Chatbot Section */
+.chatbot-section {
+    padding: 50px 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-top: 40px;
+    border-radius: 10px;
+}
+
+.chatbot-section h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#chatbox {
+    width: 80%;
+    max-width: 500px;
+    height: 300px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    overflow-y: scroll;
+}
+
+#user-input {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #388e3c;
+}
+
+/* Footer */
+.footer {
+    padding: 40px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+}
+
+.footer nav {
+    margin-bottom: 20px;
+}
+
+.footer nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+.footer nav a:hover {
+    color: #4CAF50;
+}
+
+.footer .social-media {
+    margin-bottom: 20px;
+}
+
+.footer .social-media a {
+    margin: 0 10px;
+}
+
+.footer .social-media a img {
+    width: 24px;
+}
+
+.footer .contact-info {
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .benefits {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .benefit-item {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .vertical-separation {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .vertical-separation img,
+    .vertical-separation div {
+        width: 100%;
+    }
+    .counselor-item {
+        width: 80%;
+    }
+}
+

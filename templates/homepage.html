@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">MindConnect</div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#benefits">Benefits</a></li>
+            <li><a href="#counselors">Counselors</a></li>
+            <li><a href="#appointments">Appointments</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Your Mental Health Matters</h1>
+        <h2>Providing help when you need it most</h2>
+        <button class="cta-button">Get Help Now</button>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="benefit-item">
+            <h3>Why Seek Help?</h3>
+            <p>Early intervention can prevent stress from becoming chronic.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>Confidential Support</h3>
+            <p>We provide a safe, non-judgmental space to talk.</p>
+        </div>
+        <div class="benefit-item">
+            <h3>Professional Guidance</h3>
+            <p>Connect with licensed mental health professionals.</p>
+        </div>
+    </section>
+
+    <!-- Counselors Section -->
+    <section class="counselors" id="counselors">
+        <h2>Our Counselors</h2>
+        <div class="counselor-item">
+            <h3>Dr. Jane Doe</h3>
+            <p>Specialist in anxiety and stress management with over 10 years of experience.</p>
+            <button class="book-now-button">Book Appointment</button>
+        </div>
+        <div class="counselor-item">
+            <h3>Dr. John Smith</h3>
+            <p>Licensed therapist focusing on trauma recovery and emotional wellbeing.</p>
+            <button class="book-now-button">Book Appointment</button>
+        </div>
+        <div class="counselor-item">
+            <h3>Dr. Carrie Winston</h3>
+            <p> Seasoned therapist with a background in crisis intervention, specializing in areas experiencing civil unrest.</p>
+            <button class="book-now-button">Book Appointment</button>
+        </div>
+        <div class="counselor-item">
+            <h3>Dr. John Smith</h3>
+            <p>Specializes in substance abuse recovery and behavioral addiction management, providing a holistic and compassionate approach to lasting recovery.</p>
+            <button class="book-now-button">Book Appointment</button>
+        </div>
+        
+    </section>
+
+    <!-- Appointments Section -->
+    <section class="appointments">
+        <h2>Book an Appointment</h2>
+        <form action="homepage.html" method="POST">
+            <input type="text" name="appointment_date" placeholder="Appointment Date (e.g., 2024-10-05)" required>
+            <textarea name="description" placeholder="Brief description of your appointment" required></textarea>
+            <button type="submit">Book Appointment</button>
+        </form>
+    </section>
+
+    <!-- Vertical Separation Section -->
+    <section class="vertical-separation">
+        <img src="{{ url_for('static', filename='images.jpeg') }}" alt="Illustration">
+        <div>
+            <h4>Find Balance and Wellbeing</h4>
+            <p>We all need help at different times in life. At MindConnect, we aim to provide the support you need in a convenient and confidential manner. Our licensed professionals are here to listen and guide you through tough times.</p>
+            <div class="container"></div>
+            <p> Please feel free to talk to our chatbot for immediate support.</p>
+
+            <div id="chat-container"></div>
+            <div id="chatbox"></div>
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </section>>
+
+    <!-- Resources Section -->
+    <section class="resources" id="resources">
+        <h2>Resources</h2>
+        <ul>
+            <li><a href="#stress-management">Stress Management Techniques</a></li>
+            <li><a href="#support-groups">Support Groups in Your Area</a></li> 
+            <li><a href="#emergency-contacts">Emergency Contacts</a></li>
+        </ul>
+
+        <!-- Stress Management Techniques -->
+        <h2 id="stress-management">Stress Management Techniques</h2>
+        <ul>
+            <li>Deep Breathing Exercises</li>
+            <li>Meditation and Mindfulness</li>
+            <li>Physical Activity and Exercise</li>
+            <li>Journaling</li>
+            <li>Talking to a trusted friend or therapist</li>
+        </ul>
+        
+        <!-- Support Groups -->
+        <h2 id="support-groups">Support Groups in Your Area</h2>
+        <ul>
+            <li><a href="https://www.nami.org">National Alliance on Mental Illness (NAMI)</a></li>
+            <li><a href="https://www.psychologytoday.com/us/groups">Psychology Today's Therapy Groups</a></li>
+        </ul>
+
+        <!-- Emergency Contacts -->
+        <h2 id="emergency-contacts">Emergency Contacts</h2>
+        <ul>
+            <li><p>If you or someone you know is in crisis, please reach out for help. Here are some contacts:</p></li>
+            <li>Emergency Services: 911</li>
+            <li>National Suicide Prevention Lifeline: 1-800-273-TALK (8255)</li>
+            <li>Crisis Text Line: Text "HELLO" to 741741</li>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <nav>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </nav>
+        <div class="social-media">
+            <a href="#"><img src="facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="twitter.png" alt="Twitter"></a>
+            <a href="#"><img src="instagram.png" alt="Instagram"></a>
+        </div>
+        <div class="contact-info">
+            <p>Call us: (123) 456-7890 | Email: support@mindconnect.com</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+</body>
+</html>
+

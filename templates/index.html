@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="split-screen">
+            <!-- Graphic Illustration -->
+            <div class="graphic">
+            <img src="{{ url_for('static', filename='download.jpeg') }}" alt="Download Image">
+            </div>
+
+            <!-- Login/Register Toggle Section -->
+            <div class="login-form">
+                <!-- Tabs -->
+                <div class="tab-container">
+                    <button class="tab-button active" onclick="showForm('login')">Login</button>
+                    <button class="tab-button" onclick="showForm('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="login-form" class="form-section">
+                    <h2>Login to MindConnect</h2>
+                    <form id="login">
+                        <div>
+                            <label for="login-email">Email:</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div>
+                            <label for="login-password">Password:</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="stay-logged-in">
+                            <input type="checkbox" id="login-stayLoggedIn">
+                            <label for="login-stayLoggedIn">Stay logged in</label>
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                    <div class="social-login">
+                        <button class="google">Login with Google</button>
+                        <button class="facebook">Login with Facebook</button>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" class="form-section" style="display: none;">
+                    <h2>Create an Account</h2>
+                    <form id="register">
+                        <div>
+                            <label for="register-username">Username:</label>
+                            <input type="text" id="register-username" placeholder="Enter a username" required>
+                        </div>
+                        <div>
+                            <label for="register-email">Email:</label>
+                            <input type="email" id="register-email" placeholder="Enter your email" required>
+                        </div>
+                        <div>
+                            <label for="register-password">Password:</label>
+                            <input type="password" id="register-password" placeholder="Enter a password" required>
+                        </div>
+                        <div>
+                            <label for="confirm-password">Confirm Password:</label>
+                            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                        </div>
+                        <div class="stay-logged-in">
+                            <input type="checkbox" id="register-stayLoggedIn">
+                            <label for="register-stayLoggedIn">Stay logged in</label>
+                        </div>
+                        <button type="submit">Sign Up</button>
+                    </form>
+                    <div class="social-login">
+                        <button class="google">Sign up with Google</button>
+                        <button class="facebook">Sign up with Facebook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
