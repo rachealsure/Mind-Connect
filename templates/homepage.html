@@ -4,11 +4,9 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='\css\style.css') }}">
     </head>
-<body>
-
+    <body> 
     <!-- Navbar -->
     <header class="navbar">
         <div class="logo">MindConnect</div>
@@ -56,17 +54,14 @@
         <div class="counselor-item">
             <h3>Dr. John Smith</h3>
             <p>Licensed therapist focusing on trauma recovery and emotional wellbeing.</p>
-            <button class="book-now-button">Book Appointment</button>
         </div>
         <div class="counselor-item">
             <h3>Dr. Carrie Winston</h3>
             <p> Seasoned therapist with a background in crisis intervention, specializing in areas experiencing civil unrest.</p>
-            <button class="book-now-button">Book Appointment</button>
         </div>
         <div class="counselor-item">
             <h3>Dr. John Smith</h3>
             <p>Specializes in substance abuse recovery and behavioral addiction management, providing a holistic and compassionate approach to lasting recovery.</p>
-            <button class="book-now-button">Book Appointment</button>
         </div>
         
     </section>
@@ -83,7 +78,7 @@
 
     <!-- Vertical Separation Section -->
     <section class="vertical-separation">
-        <img src="{{ url_for('static', filename='images.jpeg') }}" alt="Illustration">
+        <img src="{{ url_for('static', filename='\images.jpeg') }}" alt="Illustration">
         <div>
             <h4>Find Balance and Wellbeing</h4>
             <p>We all need help at different times in life. At MindConnect, we aim to provide the support you need in a convenient and confidential manner. Our licensed professionals are here to listen and guide you through tough times.</p>
@@ -149,7 +144,7 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    <script src="{{ url_for('static', filename='static\js\chatbot.js') }}"></script>
 </body>
 </html>
 

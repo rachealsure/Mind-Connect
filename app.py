@@ -7,7 +7,7 @@ import os
 from flask_cors import CORS
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Lifelineray123@localhost/mindconnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
@@ -154,5 +154,5 @@ def book_appointment():
 if __name__ == '__main__':
       with app.app_context():
         db.create_all()
-app.run(port=5000, debug=True)
+app.run(port=5500, debug=True)
     
