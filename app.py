@@ -7,7 +7,7 @@ import os
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://username:Lifelineray123@localhost/mindconnect'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Lifelineray123@localhost/mindconnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Set your OpenAI API key here
