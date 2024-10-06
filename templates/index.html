@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindConnect</title>
-    <link href="\Mind-Connect\static\css\login.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
     <div class="login-container">
         <div class="split-screen">
             <!-- Graphic Illustration -->
             <div class="graphic">
-                <img src="download.jpeg" alt="MindConnect Graphic">
+            <img src="{{ url_for('static', filename='download.jpeg') }}" alt="Download Image">
             </div>
 
             <!-- Login/Register Toggle Section -->
@@ -81,6 +81,6 @@
         </div>
     </div>
 
-    <script src="static\js\index.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
