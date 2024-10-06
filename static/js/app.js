@@ -4,9 +4,12 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql2');
+const cors = require('cors');
 
 // Initialize Express app
 const app = express();
+
+app.use(cors());
 
 // Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +29,7 @@ app.use(passport.session());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Hampty@2030',
+    password: 'Lifelineray123',
     database: 'mindconnect'
 });
 
@@ -70,7 +73,7 @@ passport.deserializeUser((id, done) => {
 
 // Route to display registration form
 app.get('/register', (req, res) => {
-    res.sendFile(__dirname + '/register.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 // Handle registration form submission
@@ -89,7 +92,7 @@ app.post('/register', async (req, res) => {
 
 // Route to display login form
 app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
 // Handle login form submission
