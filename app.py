@@ -1,32 +1,65 @@
-from flask import Flask, render_template, request, jsonify
+import openai
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
+
+# Initialize Flask app
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# Set your OpenAI API key here
+openai.api_key = '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'
 
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_input = request.json['message']
-    bot_response = get_bot_response(user_input)
-    return jsonify({'response': bot_response})
+# Define a function to interact with OpenAI API
+def get_openai_response(message):
+    try:
+        # Call OpenAI's GPT model
+        response = openai.Completion.create(
+            engine="text-davinci-003",  # GPT-3 model
+            prompt=message,
+            max_tokens=150,  # Limit on the response length
+            temperature=0.7,  # Temperature for creativity
+            n=1,  # Number of responses to generate
+            stop=None,  # When to stop the generation (you can customize it)
+        )
+        
+        # Extract the response text
+        reply = response.choices[0].text.strip()
+        return reply
 
-def get_bot_response(user_input):
-    user_input = user_input.lower()
+    except Exception as e:
+        return "Sorry, I'm having trouble processing your request right now. Please try again later."
+
+# Define a route to handle incoming chatbot requests
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    data = request.json
+    user_message = data.get('message')
     
-    if 'help' in user_input:
-        return "I'm here to help! Please share what's on your mind."
-    elif 'stress' in user_input:
-        return "It's normal to feel stressed. Try to take deep breaths and talk to someone you trust."
-    elif 'anxiety' in user_input:
-        return "Anxiety can be tough. Have you tried grounding techniques or talking to a friend?"
-    elif 'depression' in user_input:
-        return "It's important to reach out for support if you're feeling depressed. You're not alone."
-    elif 'thank you' in user_input:
-        return "You're welcome! I'm here whenever you need to talk."
-    else:
-        return "I'm not sure how to respond to that. Can you tell me more?"
+    # Ensure there is a message
+    if not user_message:
+        return jsonify({'reply': "I didn't understand that. Could you rephrase it?"})
+    
+    # Get the AI response from OpenAI
+    bot_reply = get_openai_response(user_message)
+    
+    return jsonify({'reply': bot_reply})
 
+# Booking Appointment API
+@app.route('/api/book-appointment', methods=['POST'])
+def book_appointment():
+    data = request.json
+    counselor = data.get('counselor')
+    name = data.get('name')
+    email = data.get('email')
+    date = data.get('date')
+
+    # Logic to save the appointment to a database (mock response here)
+    if counselor and name and email and date:
+        return jsonify({'success': True, 'message': 'Appointment booked successfully!'})
+    else:
+        return jsonify({'success': False, 'message': 'Failed to book appointment.'}), 400
+
+# Start the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5500, debug=True)
+    
