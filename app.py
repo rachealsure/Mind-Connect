@@ -43,7 +43,7 @@ def index():
 
 # Route to serve the homepage
 @app.route('/homepage')
-def homepage():
+def home():
     return render_template('homepage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
