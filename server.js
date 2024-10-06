@@ -33,21 +33,27 @@ app.get('/clients', (req, res) => {
     });
 });
 
-// Simple POST route for adding clients
-app.post('/clients/add', (req, res) => {
-    const { name, email, password } = req.body;
-    const query = 'INSERT INTO clients (name, email, password) VALUES (?, ?, ?)';
+// Simple POST route for clients
+//app.post('/clients/add', (req, res) => {
+    //console.log("Received data:", req.body);
+    //res.json({ message: 'Client added successfully!' });
+//}); 
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
     
-    db.query(query, [name, email, password], (error, results) => {
-        if (error) {
-            return res.status(500).json({ message: 'Error adding client', error });
-        }
-        res.json({ message: 'Client added successfully!', clientId: results.insertId });
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Insert new user into database
+    db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, result) => {
+        if (err) throw err;
+        res.redirect('/login');
     });
 });
 
-// Start the server
-app.listen(3000, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:3000');
-});
 
+// Start the server
+app.listen(5500, '127.0.0.1', () => {
+    console.log('Server running on 127.0.0.1:5500');
+});
