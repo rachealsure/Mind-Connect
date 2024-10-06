@@ -12,7 +12,9 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('static\images\iii.avif') repeat; 
+    background: url('../css/static/iii.avif');
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center;
     background-size: cover;
 }
 
