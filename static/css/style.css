@@ -6,7 +6,9 @@
 }
 
 body {
-    background-image: url('/static/sky.avif') center center fixed;
+    background-image: url('/static/images/sky.avif');
+    background-position: center center;
+    background-attachment: fixed;
     background-size: cover;
     color: #333;
     display: flex;
