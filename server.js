@@ -1,77 +1,36 @@
-// const express = require('express');
-// const app = express();
-
-// // Middleware
-// app.use(express.json());
-
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//     console.error(err.stack);
-//     res.status(500).send('Something broke!');
-// });
-
-// app.get('/clients', (req, res) => {
-//     try {
-//         res.status(200).send({
-//             message: 'Clients retrieved successfully',
-//             data: clients
-//         });
-//     } catch (error) {
-//         console.error("Error retrieving clients:", error);
-//         res.status(500).send({ error: 'Internal server error' });
-//     }
-// });
-
-// // Simple POST route to add clients
-// app.post('/clients/add', (req, res) => {
-//     try {
-//         console.log("Received data:", req.body);
-//         res.status(200).send({ message: 'Client added successfully!' });
-//     } catch (error) {
-//         console.error("Error processing request:", error);
-//         res.status(500).send({ error: 'Internal server error' });
-//     }
-// });
-
-// // Start the server
-// const server = app.listen(3000, '127.0.0.1', () => {
-//     console.log('Server running on 127.0.0.1:3000');
-// });
-
-// // Handle server errors
-// server.on('error', (error) => {
-//     if (error.code === 'EADDRINUSE') {
-//         console.error('Port 3000 is already in use');
-//     } else {
-//         console.error('An error occurred:', error);
-//     }
-// });
-
-// process.on('uncaughtException', (error) => {
-//     console.error('Uncaught Exception:', error);
-//     process.exit(1);
-// });
-
-
-
-
-
-////////////////////////////////////////////////////////
-
 const express = require('express');
+const mysql = require('mysql2'); // Import mysql2
 const app = express();
 
 // Middleware
 app.use(express.json());
 
-// Test route to verify server is working
-app.get('/test', (req, res) => {
-    res.send('Server is working!');
+// Connect to MySQL
+const db = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root', // replace with your MySQL username
+    password: 'Hampty@2030', // your MySQL password
+    database: 'mindconnect' // your database name
+});
+
+// Verify the connection to MySQL
+db.connect(err => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err);
+    } else {
+        console.log('Connected to MySQL!');
+    }
 });
 
 // Simple GET route for clients
 app.get('/clients', (req, res) => {
-    res.json({ message: 'This is the clients endpoint', clients: [] });
+    const query = 'SELECT * FROM clients'; // Adjust table name as necessary
+    db.query(query, (error, results) => {
+        if (error) {
+            return res.status(500).json({ message: 'Error fetching clients', error });
+        }
+        res.json({ message: 'Clients retrieved successfully', clients: results });
+    });
 });
 
 // Simple POST route for clients
