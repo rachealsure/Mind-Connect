@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title></title>
+        <title>MindConnect</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/css/style.css">
+        <link rel="stylesheet" href="/css/style.css"> <!-- Adjusted path for Node.js -->
     </head>
     <body> 
     <!-- Navbar -->
@@ -56,28 +56,35 @@
         </div>
         <div class="counselor-item">
             <h3>Dr. Carrie Winston</h3>
-            <p> Seasoned therapist with a background in crisis intervention, specializing in areas experiencing civil unrest.</p>
+            <p>Seasoned therapist with a background in crisis intervention, specializing in areas experiencing civil unrest.</p>
         </div>
         <div class="counselor-item">
             <h3>Dr. Mary Okoth</h3>
             <p>Specializes in substance abuse recovery and behavioral addiction management, providing a holistic and compassionate approach to lasting recovery.</p>
         </div>
-        
     </section>
 
     <!-- Appointments Section -->
-    <section class="appointments">
-        <h2>Book an Appointment</h2>
-        <form action="/homepage" method="POST">
-            <input type="text" name="appointment_date" placeholder="Appointment Date (e.g., 2024-10-05)" required>
-            <textarea name="description" placeholder="Brief description of your appointment" required></textarea>
-            <button type="submit">Book Appointment</button>
-        </form>
-    </section>
+     
+<section class="appointments" id="appointments" style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+    <h2 style="text-align: center;">Book an Appointment</h2>
+    <form action="/homepage" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
+        <label for="appointment_date" style="font-weight: bold;">Select Appointment Date:</label>
+        <input type="date" name="appointment_date" id="appointment_date" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        
+        <label for="description" style="font-weight: bold;">Appointment Description:</label>
+        <textarea name="description" id="description" placeholder="Enter a brief description..." required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; resize: vertical;"></textarea>
+        
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+            Book Appointment
+        </button>
+    </form>
+</section>
+
 
     <!-- Vertical Separation Section -->
     <section class="vertical-separation">
-        <img src="/static/images.jpeg" alt="Image">
+        <img src="/images/images.jpeg" alt="Image"> <!-- Adjusted path -->
         <div>
             <h4>Find Balance and Wellbeing</h4>
             <p>We all need help at different times in life. At MindConnect, we aim to provide the support you need in a convenient and confidential manner. Our licensed professionals are here to listen and guide you through tough times.</p>
@@ -89,7 +96,7 @@
             <input type="text" id="user-input" placeholder="Type your message..." />
             <button onclick="sendMessage()">Send</button>
         </div>
-    </section>>
+    </section>
 
     <!-- Resources Section -->
     <section class="resources" id="resources">
@@ -134,16 +141,17 @@
             <a href="#">Terms of Service</a>
         </nav>
         <div class="social-media">
-            <a href="#"><img src="/static/facebook.png" alt="Facebook"></a>
-            <a href="#"><img src="/static/twitter.png" alt="Twitter"></a>
-            <a href="#"><img src="/static/instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="/images/facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="/images/twitter.png" alt="Twitter"></a>
+            <a href="#"><img src="/images/instagram.png" alt="Instagram"></a>
         </div>
         <div class="contact-info">
             <p>Call us: (123) 456-7890 | Email: support@mindconnect.com</p>
         </div>
     </footer>
 
-     <script src="/static/js/chatbot.js"></script></scrip>
+    <!-- Adjusted script path for Node.js -->
+    <script src="/js/chatbot.js"></script>
 </body>
 </html>
 

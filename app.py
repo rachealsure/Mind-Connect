@@ -1,179 +1,233 @@
-import openai
-from flask import Flask, request, jsonify,render_template,redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask_cors import CORS  
-import openai
-# In Python interactive shell or script
-from app import db
-from werkzeug.security import generate_password_hash, check_password_hash
-import os
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+import os
+from openai import OpenAI
+from datetime import datetime
+
+# Load environment variables
+load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Lifelineray123@localhost/mindconnect'
+app.template_folder = 'templates'
+import os
+
+ # Get the absolute path to your project root directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Set the template directory
+template_dir = os.path.join(BASE_DIR, 'templates')
+app.template_folder = template_dir
+
+print(f"Template directory is set to: {template_dir}")  # Debug print
+
+
+# Configure secret key and database
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key-for-development')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Hampty2030@localhost/MindConnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize database
+# Initialize extensions
 db = SQLAlchemy(app)
-
-# Initialize CORS
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 CORS(app)
 
-# Set the secret key
-app.secret_key = secrets.token_hex(32)
+# Test connection
+try:
+    with app.app_context():
+        db.engine.connect()
+        print("Database connection successful!")
+except Exception as e:
+    print(f"Database connection failed: {e}")
 
-# Set your OpenAI API key here
-openai.api_key = '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'
 
-db = SQLAlchemy(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-# Test database connection
-def test_db_connection():
-    try:
-        with app.app_context():
-            db.engine.connect()
-            print("Successfully connected to the database!")
-            return True
-    except Exception as e:
-        print(f"Database connection failed: {str(e)}")
-        return False
-
-### Database Models ###
+# User model
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    chats = db.relationship('Chat', backref='user', lazy=True)
 
-class Appointment(db.Model):
+# Chat model
+class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    appointment_date = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    response = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/')
-def index():
-    return render_template('index.html')  # Registration/Login page
-
-# Route to serve the homepage
+# Routes
 @app.route('/')
 def home():
     return render_template('homepage.html')
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-
-        user_exists = User.query.filter_by(email=email).first()
-        if user_exists:
-            flash('Email is already registered', 'danger')
+        
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered', 'danger')
             return redirect(url_for('register'))
-
-        new_user = User(username=username, email=email, password=generate_password_hash(password))
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('login'))
-    return render_template('homepage.html')
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already taken', 'danger')
+            return redirect(url_for('register'))
+        
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, email=email, password=hashed_password)
+        
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful! Please login.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'danger')
+            
+    return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
+        
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('homepage'))
+            flash('Logged in successfully!', 'success')
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('dashboard'))
         else:
-            flash('Login failed. Check email or password.', 'danger')
-    return render_template('homepage.html')
+            flash('Invalid email or password', 'danger')
+    
+    return render_template('login.html')
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
 
-@app.route('/homepage', methods=['GET', 'POST'])
+@app.route('/dashboard')
 @login_required
-def homepage():
-    if request.method == 'POST':
-        appointment_date = request.form.get('appointment_date')
-        description = request.form.get('description')
+def dashboard():
+    return render_template('dashboard.html')
 
-        new_appointment = Appointment(user_id=current_user.id, appointment_date=appointment_date, description=description)
-        db.session.add(new_appointment)
-        db.session.commit()
-        flash('Appointment booked successfully!', 'success')
-        appointments = Appointment.query.filter_by(user_id=current_user.id).all()
-    return render_template('homepage.html', appointments=appointments)\
+@app.route('/counselors')
+def counselors():
+    # logic to render the counselors page
+    return render_template('counselors.html')
 
-# Define a function to interact with OpenAI API
-def get_openai_response(message):
+
+@app.route('/chat', methods=['POST'])
+@login_required
+def chat():
     try:
-        # Call OpenAI's GPT model
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # GPT-3 model
-            prompt=message,
-            max_tokens=150,  # Limit on the response length
-            temperature=0.7,  # Temperature for creativity
-            n=1,  # Number of responses to generate
-            stop=None,  # When to stop the generation (you can customize it)
+        data = request.json
+        user_message = data.get('message')
+        
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": user_message}
+            ]
         )
         
-        # Extract the response text
-        reply = response.choices[0].text.strip()
-        return reply
+        assistant_response = completion.choices[0].message.content
+
+        new_chat = Chat(
+            user_id=current_user.id,
+            message=user_message,
+            response=assistant_response
+        )
+        db.session.add(new_chat)
+        db.session.commit()
+
+        return jsonify({
+            'response': assistant_response,
+            'success': True
+        })
 
     except Exception as e:
-        print(f"Error: {e}")  # Optionally print the error for debugging
-        return "Sorry, I'm having trouble processing your request right now. Please try again later."
-
-      
-
+        return jsonify({'error': str(e), 'success': False}), 500
+    
 @app.route('/chatbot', methods=['POST'])
+@login_required
 def chatbot():
-    data = request.json
-    user_message = data.get('message')
-    
-    # Ensure there is a message
-    if not user_message:
-        return jsonify({'reply': "I didn't understand that. Could you rephrase it?"})
-    
-    # Get the AI response from OpenAI
-    bot_reply = get_openai_response(user_message)
-    return jsonify({'reply': bot_reply})
+    try:
+        data = request.json
+        user_message = data.get('message')
+        
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": user_message}
+            ]
+        )
+        
+        assistant_response = completion.choices[0].message.content
 
-@app.route('/api/book-appointment', methods=['POST'])
-def book_appointment():
-    data = request.json
-    counselor = data.get('counselor')
-    name = data.get('name')
-    email = data.get('email')
-    date = data.get('date')
+        new_chat = Chat(
+            user_id=current_user.id,
+            message=user_message,
+            response=assistant_response
+        )
+        db.session.add(new_chat)
+        db.session.commit()
 
-    if counselor and name and email and date:
-        return jsonify({'success': True, 'message': 'Appointment booked successfully!'})
-    else:
-        return jsonify({'success': False, 'message': 'Failed to book appointment.'}), 400
+        return jsonify({
+            'response': assistant_response,
+            'success': True
+        })
 
+    except Exception as e:
+        print(f"Error in chatbot route: {str(e)}")
+        return jsonify({'error': str(e), 'success': False}), 500
+
+@app.route('/chat-interface')
+@login_required
+def chat_interface():
+    return render_template('chat.html')
+
+@app.route('/chat-history')
+@login_required
+def chat_history():
+    chats = Chat.query.filter_by(user_id=current_user.id).order_by(Chat.timestamp.desc()).all()
+    return render_template('chat_history.html', chats=chats)
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
+    # Start the Flask app
 if __name__ == '__main__':
       with app.app_context():
         db.create_all()
-app.run(port=5500, debug=True)
-    
+app.run(port=3000, debug=True)

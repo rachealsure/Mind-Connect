@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindConnect</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="login-container">
         <div class="split-screen">
             <!-- Graphic Illustration -->
             <div class="graphic">
-            <img src="{{ url_for('static', filename='download.jpeg') }}" alt="Download Image">
+                <img src="{{ url_for('static', filename='download.jpeg') }}" alt="Download Image">
             </div>
 
             <!-- Login/Register Toggle Section -->
@@ -25,14 +25,14 @@
                 <!-- Login Form -->
                 <div id="login-form" class="form-section">
                     <h2>Login to MindConnect</h2>
-                    <form id="login">
+                    <form id="login" action="{{ url_for('login') }}" method="POST">  <!-- Added action and method -->
                         <div>
                             <label for="login-email">Email:</label>
-                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                            <input type="email" name="email" id="login-email" placeholder="Enter your email" required>
                         </div>
                         <div>
                             <label for="login-password">Password:</label>
-                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                            <input type="password" name="password" id="login-password" placeholder="Enter your password" required>
                         </div>
                         <div class="stay-logged-in">
                             <input type="checkbox" id="login-stayLoggedIn">
@@ -49,22 +49,22 @@
                 <!-- Register Form -->
                 <div id="register-form" class="form-section" style="display: none;">
                     <h2>Create an Account</h2>
-                    <form id="register">
+                    <form id="register" action="{{ url_for('register') }}" method="POST">  <!-- Added action and method -->
                         <div>
                             <label for="register-username">Username:</label>
-                            <input type="text" id="register-username" placeholder="Enter a username" required>
+                            <input type="text" name="username" id="register-username" placeholder="Enter a username" required>
                         </div>
                         <div>
                             <label for="register-email">Email:</label>
-                            <input type="email" id="register-email" placeholder="Enter your email" required>
+                            <input type="email" name="email" id="register-email" placeholder="Enter your email" required>
                         </div>
                         <div>
                             <label for="register-password">Password:</label>
-                            <input type="password" id="register-password" placeholder="Enter a password" required>
+                            <input type="password" name="password" id="register-password" placeholder="Enter a password" required>
                         </div>
                         <div>
                             <label for="confirm-password">Confirm Password:</label>
-                            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                            <input type="password" name="confirm_password" id="confirm-password" placeholder="Confirm your password" required>
                         </div>
                         <div class="stay-logged-in">
                             <input type="checkbox" id="register-stayLoggedIn">
