@@ -1,0 +1,96 @@
+<!-- templates/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chat-box {
+            height: 400px;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: 20%;
+        }
+        .bot-message {
+            background-color: #f5f5f5;
+            margin-right: 20%;
+        }
+        #message-input {
+            width: 80%;
+            padding: 10px;
+        }
+        #send-button {
+            width: 18%;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div>
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(sendMessage);
+            $('#message-input').keypress(function(e) {
+                if(e.which == 13) sendMessage();
+            });
+
+            function sendMessage() {
+                var message = $('#message-input').val();
+                if(message.trim() === '') return;
+
+                // Add user message to chat
+                $('#chat-box').append(`
+                    <div class="message user-message">
+                        <strong>You:</strong> ${message}
+                    </div>
+                `);
+
+                // Clear input
+                $('#message-input').val('');
+
+                // Send to server
+                $.ajax({
+                    url: '/chat',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ message: message }),
+                    success: function(response) {
+                        $('#chat-box').append(`
+                            <div class="message bot-message">
+                                <strong>AI:</strong> ${response.response}
+                            </div>
+                        `);
+                        // Scroll to bottom
+                        $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -29,7 +29,7 @@ app.use(passport.session());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Lifelineray123',
+    password: 'Hampty2030',
     database: 'mindconnect'
 });
 
@@ -119,6 +119,6 @@ app.get('/logout', (req, res) => {
 });
 
 // Start the server
-app.listen(5500, () => {
-    console.log('Server is running on port 5500');
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });

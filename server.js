@@ -1,6 +1,15 @@
 const express = require('express');
-const mysql = require('mysql2'); // Import mysql2
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const mysql = require('mysql2');
+
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
 
 // Middleware
 app.use(express.json());
@@ -29,7 +38,7 @@ app.get('/user', (req, res) => {
         if (error) {
             return res.status(500).json({ message: 'Error fetching user', error });
         }
-        res.json({ message: 'Use retrieved successfully', user: results });
+        res.json({ message: 'Users retrieved successfully', user: results });
     });
 });
 
@@ -39,21 +48,27 @@ app.post('/clients/add', (req, res) => {
     res.json({ message: 'Client added successfully!' });
 }); 
 
+// Registration route
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Insert new user into database
-    db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, result) => {
-        if (err) throw err;
-        res.redirect('/login');
-    });
+
+    try {
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert new user into database
+        db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error registering user', error: err });
+            }
+            res.redirect('/login');
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Error processing registration', error: err });
+    }
 });
 
-
-// Start the server
-app.listen(5500, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:5500');
+// Start the server on port 3000
+app.listen(3000, '127.0.0.1', () => {
+    console.log('Server running on 127.0.0.1:3000');
 });
