@@ -15,14 +15,10 @@ load_dotenv()
 app = Flask(__name__)
 app.template_folder = 'templates'
 import os
+from flask import Flask
 
- # Get the absolute path to your project root directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Set the template directory
-template_dir = os.path.join(BASE_DIR, 'templates')
-app.template_folder = template_dir
+app = Flask(__name__, static_folder='static')
 
-print(f"Template directory is set to: {template_dir}")  # Debug print
 
 
 # Configure secret key and database
@@ -68,7 +64,21 @@ class Chat(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():  # Only one login function
+    return render_template('login.html')
+
+@app.route('/home', methods=['GET'])
+def home():
+    return render_template('home.html')
+
+
+
 # Routes
+
 @app.route('/')
 def home():
     return render_template('homepage.html')
