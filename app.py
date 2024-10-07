@@ -10,6 +10,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from flask_cors import CORS
+import secrets
 
 # Initialize Flask app
 app = Flask(__name__)
