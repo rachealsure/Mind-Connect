@@ -53,7 +53,7 @@ pip install flask flask-cors
 python app.py
 ```
 
-By default, the Flask app will run at `http://127.0.0.1:3000`.
+By default, the Flask app will run at `http://127.0.0.1:5500`.
 
 ### 4. Open the `index.html` file in your browser:
 Navigate to the frontend directory and open `index.html` in any browser:

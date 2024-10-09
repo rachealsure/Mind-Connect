@@ -18,7 +18,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root', // replace with your MySQL username
-    password: 'Hampty2030', // your MySQL password
+    password: 'Lifelineray123', // your MySQL password
     database: 'mindconnect' // your database name
 });
 
@@ -70,5 +70,5 @@ app.post('/register', async (req, res) => {
 
 // Start the server on port 3000
 app.listen(3000, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:3000');
+    console.log('Server running on 127.0.0.1:5500');
 });
