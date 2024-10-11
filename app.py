@@ -1,3 +1,4 @@
+from http import client
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -42,7 +43,10 @@ except Exception as e:
 
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+OpenAI.api_key = os.getenv('sk-JRfXgA339KNwhiI01Ul6g2U_D0zKM2c2QrTmHSYWrBT3BlbkFJp78blt7SetdLojoV5HzBrfFXAg79MWnS9IG45I8VQA')
+
+if OpenAI.api_key is None:
+    raise Exception("OpenAI API Key not found. Make sure the environment variable is set.")
 
 # User model
 class User(UserMixin, db.Model):
