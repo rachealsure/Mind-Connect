@@ -45,9 +45,6 @@ except Exception as e:
 # Initialize OpenAI client
 OpenAI.api_key = os.getenv('sk-JRfXgA339KNwhiI01Ul6g2U_D0zKM2c2QrTmHSYWrBT3BlbkFJp78blt7SetdLojoV5HzBrfFXAg79MWnS9IG45I8VQA')
 
-if OpenAI.api_key is None:
-    raise Exception("OpenAI API Key not found. Make sure the environment variable is set.")
-
 # User model
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
