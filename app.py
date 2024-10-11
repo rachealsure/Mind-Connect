@@ -20,8 +20,6 @@ from flask import Flask
 
 app = Flask(__name__, static_folder='static')
 
-
-
 # Configure secret key and database
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key-for-development')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Hampty2030@localhost/MindConnect'
@@ -74,17 +72,11 @@ def login():  # Only one login function
 
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template('home.html')
+    return render_template('homepage.html')
 
 
 
 # Routes
-
-@app.route('/')
-def home():
-    return render_template('homepage.html')
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
