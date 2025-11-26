@@ -6,7 +6,7 @@
 }
 
 body {
-    background-image: url('/static/sky.avif');
+    background-image: url('/static/rocks.avif');
     background-position: center center;
     background-attachment: fixed;
     background-size: cover;

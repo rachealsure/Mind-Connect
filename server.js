@@ -70,5 +70,5 @@ app.post('/register', async (req, res) => {
 
 // Start the server on port 3000
 app.listen(3000, '127.0.0.1', () => {
-    console.log('Server running on 127.0.0.1:5500');
+    console.log('Server running on 127.0.0.1:3000');
 });

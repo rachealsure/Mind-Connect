@@ -1,4 +1,3 @@
-from http import client
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -13,16 +12,11 @@ from datetime import datetime
 load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__)
-app.template_folder = 'templates'
-import os
-from flask import Flask
-
 app = Flask(__name__, static_folder='static')
 
 # Configure secret key and database
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key-for-development')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Hampty2030@localhost/MindConnect'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Lifelineray123@localhost:3306/mindconnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
@@ -39,9 +33,8 @@ try:
 except Exception as e:
     print(f"Database connection failed: {e}")
 
-
 # Initialize OpenAI client
-OpenAI.api_key = os.getenv('sk-JRfXgA339KNwhiI01Ul6g2U_D0zKM2c2QrTmHSYWrBT3BlbkFJp78blt7SetdLojoV5HzBrfFXAg79MWnS9IG45I8VQA')
+OpenAI.api_key = os.getenv('OPENAI_API_KEY')  # Ensure you set this variable securely
 
 # User model
 class User(UserMixin, db.Model):
@@ -64,17 +57,9 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-app = Flask(__name__)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():  # Only one login function
-    return render_template('login.html')
-
 @app.route('/home', methods=['GET'])
 def home():
     return render_template('homepage.html')
-
-
 
 # Routes
 @app.route('/register', methods=['GET', 'POST'])
@@ -141,12 +126,6 @@ def logout():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/counselors')
-def counselors():
-    # logic to render the counselors page
-    return render_template('counselors.html')
-
-
 @app.route('/chat', methods=['POST'])
 @login_required
 def chat():
@@ -154,15 +133,13 @@ def chat():
         data = request.json
         user_message = data.get('message')
         
-        completion = client.chat.completions.create(
+        completion = OpenAI.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_message}
-            ]
+            messages=[{"role": "system", "content": "You are a helpful assistant."},
+                      {"role": "user", "content": user_message}]
         )
         
-        assistant_response = completion.choices[0].message.content
+        assistant_response = completion['choices'][0]['message']['content']
 
         new_chat = Chat(
             user_id=current_user.id,
@@ -172,46 +149,8 @@ def chat():
         db.session.add(new_chat)
         db.session.commit()
 
-        return jsonify({
-            'response': assistant_response,
-            'success': True
-        })
-
+        return jsonify({'response': assistant_response, 'success': True})
     except Exception as e:
-        return jsonify({'error': str(e), 'success': False}), 500
-    
-@app.route('/chatbot', methods=['POST'])
-@login_required
-def chatbot():
-    try:
-        data = request.json
-        user_message = data.get('message')
-        
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_message}
-            ]
-        )
-        
-        assistant_response = completion.choices[0].message.content
-
-        new_chat = Chat(
-            user_id=current_user.id,
-            message=user_message,
-            response=assistant_response
-        )
-        db.session.add(new_chat)
-        db.session.commit()
-
-        return jsonify({
-            'response': assistant_response,
-            'success': True
-        })
-
-    except Exception as e:
-        print(f"Error in chatbot route: {str(e)}")
         return jsonify({'error': str(e), 'success': False}), 500
 
 @app.route('/chat-interface')
@@ -227,10 +166,5 @@ def chat_history():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-    app.run(debug=True)
-    # Start the Flask app
-if __name__ == '__main__':
-      with app.app_context():
-        db.create_all()
-app.run(port=5500, debug=True)
+        db.create_all()  # Ensure tables are created only once
+    app.run(port=3000, debug=True)
